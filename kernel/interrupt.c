@@ -2,7 +2,7 @@
 #include "../drivers/keyboard.h"
 #include "stdint.h"
 #include "../drivers/video.h"
-#include "pic.h"
+#include "../drivers/pic.h"
 #include "syscall.h"
 #include "timer.h"
 

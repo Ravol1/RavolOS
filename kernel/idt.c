@@ -1,6 +1,6 @@
 #include "idt.h"
 #include "memory.h"
-#include "pic.h"
+#include "../drivers/pic.h"
 #include "../drivers/io.h"
 
 #define IDT_ENTRIES 256

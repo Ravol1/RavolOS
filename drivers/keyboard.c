@@ -33,7 +33,7 @@ uint16_t get_keyboard_code() {
 void set_keyboard_map(uint16_t scancode){
     if(scancode == SCANCODE_NONE) return;
 
-    printf("Scancode recieved: %x\n", scancode);
+    //printf("Scancode recieved: %x\n", scancode);
 
     uint8_t base_scancode = (uint8_t)scancode;
     bool is_extended = ((uint8_t)(scancode >> 8) == 0xE0);
@@ -60,15 +60,16 @@ void set_keyboard_map(uint16_t scancode){
         }
     }
 
+    // Easier to debug with the prints. It can be done without the inner checks
     if(keyboard_map[key]){
         if(!pressed){
             keyboard_map[key] = false;
-            printf("Released: %x ", key);
+            //printf("Released: %x\n", key);
         }
     }
 
     else if(pressed){
         keyboard_map[key] = true;
-        printf("Pressed: %x ", key);
+        //printf("Pressed: %x ", key);
     }
 }
