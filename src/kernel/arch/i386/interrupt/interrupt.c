@@ -8,13 +8,13 @@
 
 
 void exception_handler(registers_t *reg){
-    printf("Exception %u occurred with code %u\n", reg->int_no, reg->err_code);
+    vga_print("Exception %u occurred with code %u\n", reg->int_no, reg->err_code);
     while(1);
 }
 
 
 void interrupt_generic(registers_t *reg){
-    printf("Interrupt %u called\n", reg->int_no);
+    vga_print("Interrupt %u called\n", reg->int_no);
 }
 
 void irq_handler(registers_t *reg){

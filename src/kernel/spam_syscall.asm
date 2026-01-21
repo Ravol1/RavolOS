@@ -3,8 +3,8 @@ section .text
 global spam_syscall
 extern kernel_wait_ms
 
-SYSCALL_NUM equ 11
-WAIT_TIME equ 500   ; 500ms
+SYSCALL_NUM equ 100
+WAIT_TIME equ 125   ; ms
 
 
 spam_syscall:

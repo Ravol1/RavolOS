@@ -52,36 +52,32 @@ typedef struct __attribute__((packed)) multiboot_info {
 
 void init(){
     init_gdt();
-    set_system_clock(TICK_PER_SECOND);
     idt_init();
+    set_system_clock(TICK_PER_SECOND);
     init_mem();
-    init_video();
-
 }
 
 
 extern int main(uint32_t magic, multiboot_info_t* mbi){
+    vga_init();    
+    
     if (magic == MAGIC_MB1) {
-        printf("Booted with Multiboot 1.\n");
+        vga_print("Booted with Multiboot 1.\n");
     }
 
     else if(magic== MAGIC_MB2){
-        printf("Booted with Multiboot 2.\n");
+        vga_print("Booted with Multiboot 2.\n");
     }
 
     else{
-        printf("No multiboot detected.\n");
+        vga_print("No multiboot detected.\n");
         return -1;
     }
-    init();    
-    
-    //spam_syscall();
+
+    init();
+    spam_syscall();
     
     while(1){
-        if(keyboard_map[KEY_A])
-            outw(0x4004, 0x3400);       // Shutdown (QEMU specific)
-
-        
         asm volatile("hlt");
     }
     
