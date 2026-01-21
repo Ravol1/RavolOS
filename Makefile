@@ -8,7 +8,11 @@ KERNEL_BIN ?= kernel.bin
 
 BUILD_DIR = obj
 
+<<<<<<< HEAD
 CFLAGS  = -m32 -ffreestanding -g -c -Wno-write-strings -Isrc/kernel -Isrc/lib
+=======
+CFLAGS  = -m32 -ffreestanding -m32 -g -c -Wno-write-strings -Isrc/kernel -Isrc/lib
+>>>>>>> refs/remotes/origin/main
 ASFLAGS = -f elf32
 LDFLAGS = -m elf_i386 -T linker.ld 
 
