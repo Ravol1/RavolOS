@@ -180,6 +180,7 @@ void vga_clear_screen(){
     for(uint16_t i = 0; i<SCREEN_SIZE; ++i){
         video_memory[i] = ' ' | ((uint16_t)video_mode << 8); 
     }
+    cursor_position = 0;
 }
 
 void vga_init(){
