@@ -4,14 +4,9 @@ RavolOS is a hobby operating system designed to learn and experiment with low-le
 
 ## Features
 
-- Fully custom kernel - Written from the ground up in C/Assembly
-- Multiboot2 support - Compatible with GRUB2 and other Multiboot2-compliant bootloaders
-- Makefile-based build system - Simple compilation with make
+- Multiboot2 support 
+- Makefile-based build system
 - Automated build and run scripts
-## Currently Working On
-
-- Task handling
-- FAT32 FS support
 
 ## Requirements
 Before building RavolOS, ensure you have the following dependencies installed:
