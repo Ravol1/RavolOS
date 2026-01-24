@@ -2,6 +2,24 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include "memory.h"
+#include "boot/multiboot2.h"
+#include "drivers/video/video.h"
+
+
+#define HMA_BARRIER 0x100000
+#define MAX_MMAP_ENTRIES 64
+
+
+typedef struct 
+{
+    uint32_t base;
+    uint32_t size;
+    uint8_t status;
+} mmap_entry_t;
+
+
+uint32_t mmap_size;
+mmap_entry_t mmap[MAX_MMAP_ENTRIES];  
 
 
 typedef struct
@@ -190,13 +208,6 @@ void* memset(void* ptr, uint8_t value, size_t count){
 }
 
 
-void init_mem() {
-    if (!mem_initialized) {  
-        // Initialize memory map for malloc
-        for (size_t i = 0; i < MEM_MAP_LEN; i++) {
-            mem_map[i] = 0;
-        }
-        
-        mem_initialized = true;
-    }
+mem_init_status mem_init(uint8_t* mbi) {
+
 }

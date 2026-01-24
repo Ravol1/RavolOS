@@ -4,7 +4,30 @@
 
 #define nullptr 0
 
-#define MEM_SIZE        0x40000000              // 1GiB
+
+extern char _kernel_start[];
+extern char _kernel_end[];
+#define KERNEP_LENGTH (_kernel_start - _kernel_end)
+
+extern char _code_start[];
+extern char _code_end[];
+
+extern char _rodata_start[];
+extern char _rodata_end[];
+
+extern char _data_start[];
+extern char _data_end[];
+
+extern char _bss_start[];
+extern char _bss_end[];
+
+extern char _stack_guard[];
+extern char _stack_bottom[];
+extern char _stack_top[];
+
+
+//CHANGE ALL THIS WITH MEMORY MAPPING
+#define MEM_SIZE        0x40000000              
 
 #define BLOCK_SIZE      0x1000                  // 4 KiB
 #define BLOCK_NUMBER    (MEM_SIZE/BLOCK_SIZE)
@@ -17,6 +40,14 @@
 #define MEM_TOP         (MEM_START + MEM_SIZE)
 
 
+
+typedef enum {
+    MEM_INIT_OK = 0,
+    MEM_INIT_NO_MB2_MMAP,
+    MEM_INIT_MEM_TRUNC
+} mem_init_status;
+
+
 extern char* mem_pos;
 
 void* malloc(size_t bytes);
@@ -26,4 +57,4 @@ void* realloc(void* data, size_t bytes);
 void* memset(void* ptr, uint8_t value, size_t  count);
 
 
-void init_mem();
+mem_init_status mem_init();
