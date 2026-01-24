@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "timer.h"
-#include "drivers/x86/i386/pit/pit.h"
+#include "arch/i386/pit/pit.h"
 
 #define WAIT_COUNT (1193182/10000)      // 10'000 Hz
 
