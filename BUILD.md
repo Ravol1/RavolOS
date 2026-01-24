@@ -1,7 +1,7 @@
-## Building RavolOS
+# Building RavolOS
 This guide provides detailed instructions for building and running RavolOS.
 
-# Prerequisites
+## Prerequisites
 Ensure all required dependencies are installed on your system:
 
 - GCC cross-compiler for i386 architecture
@@ -14,10 +14,10 @@ If not installed globally, you'll need to manually adjust the Makefile to point 
 - QEMU for emulation
 
 
-# Build Scripts
+## Build Scripts
 RavolOS provides several scripts in the BuildAndRun/ directory to automate the build process.
 
-1. Building the Kernel
+### 1. Building the Kernel
 Compile the kernel source files into a binary:
 ```bash
 ./BuildAndRun/build.sh -o <OUTPUT_PATH>
@@ -26,7 +26,7 @@ Compile the kernel source files into a binary:
 Options:
 - -o <PATH> - Specifies the output path for the compiled kernel binary
 
-2. Setting Up the Disk Image
+### 2. Setting Up the Disk Image
 Copy the kernel binary to a disk image file:
 bash./BuildAndRun/disk_setup.sh -i <IMAGE> -k <KERNEL> [OPTIONS]
 Options:
@@ -43,7 +43,7 @@ Examples:
 ./BuildAndRun/disk_setup.sh -i disk.img -k kernel.bin -m
 ```
 
-3. Installing GRUB
+### 3. Installing GRUB
 Install GRUB bootloader on the disk image:
 ```bash
 ./BuildAndRun/install_grub.sh -i <IMAGE> [OPTIONS]
@@ -61,7 +61,7 @@ Examples:
 ./BuildAndRun/install_grub.sh -i disk.img -c /path/to/custom/grub.cfg
 ```
 
-4. Running with QEMU
+### 4. Running with QEMU
 Launch QEMU with the disk image:
 ```bash
 ./BuildAndRun/run_qemu.sh -i <IMAGE> [OPTIONS]
@@ -70,7 +70,7 @@ Options:
 - -i <IMAGE> - Path to the disk image file
 - -l <LOG_PATH> - Specify a path for QEMU log output (if omitted, QEMU runs without logging)
 
-# Quick Build with start.sh
+## Quick Build with start.sh
 The start.sh script automates the entire build process with default options
 
 ```bash
@@ -81,13 +81,13 @@ Options:
 
 What it does:
 
-Compiles the kernel
-Sets up the disk image
-Installs GRUB with default configuration
-Runs QEMU with loging
-Dumps the kernel binary
+- Compiles the kernel.
+- Sets up the disk image.
+- Installs GRUB with default configuration.
+- Runs QEMU with loging.
+- Dumps the kernel binary.
 
-# Default Output Locations
+### Default Output Locations
 When using start.sh or the build scripts with default settings, the following files are generated:
 
 |     File      |       Location      |
@@ -97,8 +97,4 @@ When using start.sh or the build scripts with default settings, the following fi
 |   QEMU log    |     ./quemu.log     |
 |  Kernel dump  |  ./kernel_dump.asm  |
 
-# Building with Make
-You can also compile the kernel directly using the Makefile:
-```bash
-make
-```
+
