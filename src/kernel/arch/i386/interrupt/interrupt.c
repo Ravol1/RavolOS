@@ -1,10 +1,16 @@
 #include "interrupt.h"
 #include "drivers/keyboard/keyboard.h"
 #include "stdint.h"
-#include "drivers/video/video.h"
-#include "drivers/x86/i386/pic/pic.h"
 #include "core/syscall/syscall.h"
 #include "core/timer/timer.h"
+#include "drivers/video/video.h"
+#include "arch/i386/pic/pic.h"
+#include "drivers/storage/disk.h"
+
+
+
+extern char _stack_guard[];
+
 
 
 void exception_handler(registers_t *reg){
@@ -27,6 +33,10 @@ void irq_handler(registers_t *reg){
                 // schedule once implemented
                 
                 break;
+            case 46:
+                ATA_primary_irq_handler();
+                break;
+
             case 33:
                 uint16_t scancode = get_keyboard_code();
                 set_keyboard_map(scancode);

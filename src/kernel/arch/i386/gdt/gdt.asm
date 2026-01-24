@@ -1,6 +1,19 @@
-[bits 32]
+section .text
 
+global load_tr
 global load_gdt
+extern _stack_top
+
+load_tr:
+    push ebp
+    mov ebp, esp
+    mov eax, [ebp + 8]
+    
+    ltr eax          
+
+    pop ebp
+    ret
+
 
 load_gdt:
     push ebp

@@ -21,6 +21,7 @@ spam_syscall:
 loop:
     push eax
     int 0x80
+    int 46
     
     push dword WAIT_TIME
     call kernel_wait_ms

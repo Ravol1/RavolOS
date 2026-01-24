@@ -2,6 +2,9 @@
 [extern main]
 [global _start]
 
+extern _stack_top
+extern gdt_init
+
 section .multiboot
 align 8
 header_start:
@@ -16,14 +19,23 @@ header_start:
     dd 8    ; size
 header_end:
 
+
+
 section .text
 _start:
     cli
+    mov [multiboot_info], ebx
+    mov [multiboot_magic], eax
+
+    call gdt_init
     
-    ;call clear_screen
-    
-    push ebx        ; Pointer to multiboot info
-    push eax        ; Magic number
+    mov esp, _stack_top
+    mov ebp, esp
+
+    mov eax, [multiboot_info]
+    push eax
+    mov eax, [multiboot_magic]
+    push eax
     call main
     add esp, 8
 
@@ -51,3 +63,10 @@ cs_loop:
 done_cs:
     popa
     ret
+
+
+section .data
+multiboot_info:
+    dd 0
+multiboot_magic:
+    dd 0

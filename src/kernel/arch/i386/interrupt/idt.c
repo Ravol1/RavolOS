@@ -1,8 +1,9 @@
 #include <stdbool.h>
 
 #include "idt.h"
-#include "drivers/x86/i386/pic/pic.h"
+#include "arch/i386/pic/pic.h"
 #include "arch/i386/io/io.h"
+#include"arch/i386/gdt/gdt.h"
 
 #define IDT_ENTRIES 256
 #define KERNEL_CODE_SEGMENT 0x08
@@ -96,32 +97,41 @@ static idtr_t idtr;
 
 
 typedef enum {
-    IDT_FLAG_PRESENT = 0x80,
-    IDT_FLAG_DPL_0 = 0x00,      
-    IDT_FLAG_DPL_3 = 0x60,      
+    IDT_PRESENT = 0x80,
 
-} IDT_entry_types;
+    IDT_DPL_0 = 0x00,      
+    IDT_DPL_3 = 0x60,      
+    
+    IDT_GATE_TASK = 0x5,
+    IDT_GATE_INT_16 = 0x06,
+    IDT_GATE_TRAP_16 = 0x07,
+    IDT_GATE_INT = 0x0E, 
+    IDT_GATE_TRAP = 0x0F
 
-typedef enum {
-    IDT_FLAG_TASK_GATE = 0x5,
-    IDT_FLAG_INT_GATE_16 = 0x06,
-    IDT_FLAG_INT_TRAP_16 = 0x07,
-    IDT_FLAG_INT_GATE = 0x0E, 
-    IDT_FLAG_TRAP_GATE = 0x0F
-} IDT_gate_type;
-
+} idt_attribute;
 
 
-void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags){
+
+
+void idt_set_interrupt(uint8_t vector, void* isr, idt_attribute gate_type, idt_attribute dpl, idt_attribute present){
     idt_entry_t* descriptor = &idt[vector];
 
     descriptor->isr_low = (uint32_t)isr & 0xffff;
-    descriptor->kernel_cs = KERNEL_CODE_SELECTOR;
-    descriptor->attributes = flags;
+    descriptor->segmen_sel = KERNEL_CODE_SELECTOR;
+    descriptor->attributes = gate_type | dpl | present;
     descriptor->isr_high = (uint32_t)isr >> 16;
     descriptor->reserved = 0;
 }
 
+void idt_set_task(uint8_t vector, uint8_t tss_selector, idt_attribute dpl, idt_attribute present){
+    idt_entry_t* descriptor = &idt[vector];
+
+    descriptor->isr_low = 0;
+    descriptor->segmen_sel = tss_selector;
+    descriptor->attributes = IDT_GATE_TASK | dpl | present;
+    descriptor->isr_high = 0;
+    descriptor->reserved = 0;
+}
 
 void idt_init(){
     idtr.base = (uint32_t)&idt[0];
@@ -130,26 +140,27 @@ void idt_init(){
 
     // Set exceptions handlers
     for(uint8_t vector = 0; vector < 32; ++vector){
-        idt_set_descriptor(vector, ex_handlers[vector], IDT_FLAG_TRAP_GATE | IDT_FLAG_DPL_0 | IDT_FLAG_PRESENT);
+        idt_set_interrupt(vector, ex_handlers[vector], IDT_GATE_INT, IDT_DPL_0, IDT_PRESENT);
         vectors[vector] = true;
     }
+
+
+    // Double fault special handler
+    idt_set_task(8, 0x30 , IDT_DPL_0, IDT_PRESENT);
 
 
     // Set irq handlers
     for(uint8_t vector = 32; vector < 48; ++vector){
-        idt_set_descriptor(vector, irq_handlers[vector - 32], IDT_FLAG_INT_GATE | IDT_FLAG_DPL_0 | IDT_FLAG_PRESENT);
+        idt_set_interrupt(vector, irq_handlers[vector - 32], IDT_GATE_INT, IDT_DPL_0, IDT_PRESENT);
         vectors[vector] = true;
     }
 
-    idt_set_descriptor(0x80, int128, IDT_FLAG_INT_GATE | IDT_FLAG_DPL_3 | IDT_FLAG_PRESENT);
+    idt_set_interrupt(0x80, int128, IDT_GATE_INT, IDT_DPL_0, IDT_PRESENT);
     vectors[128] = true;
 
 
     remap_pic(0x20, 0x28);
-    //disable_pic();
     load_idt(&idtr);
-
-    //while(1);
 }
 
 

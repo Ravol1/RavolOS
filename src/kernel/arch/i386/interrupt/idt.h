@@ -5,7 +5,7 @@
 
 typedef struct {
     uint16_t isr_low;           // Lower 16 bits of ISR's address
-    uint16_t kernel_cs;         // The GDT segment selector that the CPU will load into CS before calling the ISR
+    uint16_t segmen_sel;        // The GDT segment selector that the CPU will load into CS before calling the ISR
     uint8_t reserved;           // Set to 0
     uint8_t attributes;         // Lower 4: Gate type; bit 4: 0; bits 5-6: DLP; bit 7: P
     uint16_t isr_high;          // Higher 16 bits of ISR's address
@@ -27,7 +27,6 @@ typedef struct {
 } __attribute__((packed)) syscall_params_t;
 
 
-void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags);
 void idt_init(void);
 
 extern void load_idt(idtr_t* descriptor);

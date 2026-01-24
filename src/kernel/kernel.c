@@ -6,92 +6,99 @@
 #include "arch/i386/gdt/gdt.h"
 #include "arch/i386/interrupt/idt.h"
 #include "arch/i386/io/io.h"
-#include "core/mm/memory.h"
+#include "arch/i386/memory/paging/paging.h"
+#include "boot/multiboot2.h"
+#include "core/memory/memory.h"
 #include "core/timer/timer.h"
 #include "core/syscall/syscall.h"
 #include "drivers/video/video.h"
 #include "drivers/keyboard/keyboard.h"
 #include "drivers/keyboard/keyboard_mapping.h"
-
-
-
-
-#define MAGIC_MB1 0x2BADB002
-#define MAGIC_MB2 0x36D76289
+#include "drivers/storage/disk.h"
 
 
 
 extern void spam_syscall();
-
-
-typedef struct __attribute__((packed)) multiboot_info {
-    uint32_t flags;         // quali campi sono validi
-    uint32_t mem_lower;     // memoria inferiore (KB)
-    uint32_t mem_upper;     // memoria superiore (KB)
-    uint32_t boot_device;   // BIOS disk device da cui si è bootato
-    uint32_t cmdline;       // puntatore a stringa cmdline
-    uint32_t mods_count;    // numero di moduli caricati
-    uint32_t mods_addr;     // puntatore array moduli
-    uint32_t syms[4];       // simboli a seconda formato a.out o ELF
-    uint32_t mmap_length;   // lunghezza della memory map
-    uint32_t mmap_addr;     // puntatore alla memory map
-    uint32_t drives_length; // lunghezza della lista dei drive
-    uint32_t drives_addr;   // puntatore alla lista dei drive
-    uint32_t config_table;  // puntatore alla config table (opzionale)
-    uint32_t boot_loader_name; // stringa con il nome del bootloader
-    uint32_t apm_table;     // puntatore alla APM table
-    uint32_t vbe_control_info; // VBE info
-    uint32_t vbe_mode_info;    // VBE mode info
-    uint16_t vbe_mode;         // VBE mode
-    uint16_t vbe_interface_seg; 
-    uint16_t vbe_interface_off; 
-    uint16_t vbe_interface_len; 
-} multiboot_info_t;
-
+extern void stack_overflow();
 
 
 void init(){
-    init_gdt();
-    idt_init();
-    set_system_clock(TICK_PER_SECOND);
-    init_mem();
+
 }
 
 
-extern int main(uint32_t magic, multiboot_info_t* mbi){
+extern int main(uint32_t magic, uint8_t* mbi){
     vga_init();    
+
+    if(!mb2_is_magic(magic)){
+        vga_print("No multiboot2 detected");
+    }
+
+    mem_init_status status = mem_init(mbi);
+
+    switch (status)
+    {
+    case MEM_INIT_OK:
+        vga_print("MEM OK.\n");
+        break;
+    case MEM_INIT_NO_MB2_MMAP:
+        vga_print("NO MMAP.\n");
+        break;
+
+    case MEM_INIT_MEM_TRUNC:
+        vga_print("MEM TRUNC.\n");
+        break;
+    default:
+        vga_print("MEM UNKNOWN ERROR.\n");
+        break;
+    }
+
+    page_init();
+    gdt_init();
+
+    set_system_clock(TICK_PER_SECOND);
+    idt_init();
     
-    if (magic == MAGIC_MB1) {
-        vga_print("Booted with Multiboot 1.\n");
+    while(1){
+        if(keyboard_map[KEY_SPACEBAR]) break;
+        asm volatile("hlt");
     }
 
-    else if(magic== MAGIC_MB2){
-        vga_print("Booted with Multiboot 2.\n");
-    }
+    stack_overflow();
 
-    else{
-        vga_print("No multiboot detected.\n");
-        return -1;
-    }
 
-    init();
-    spam_syscall();
-    
     while(1){
         asm volatile("hlt");
     }
+
+    // spam_syscall();
     
-/*
-    syscall_regs_caller* regs;
+    uint8_t* buff;
+    
+    buff = malloc(2048);
+    memset(buff, 0, 2048);
 
-    memset(regs, 0, sizeof(syscall_regs_caller));
-    regs->eax = (uint32_t)str;
+    uint8_t* read_buff;
+    read_buff = malloc(2048);
+    memset(read_buff, 'A', 2048);
 
-    system_call(regs);
+    ATA_write_sectors(0, 1, 4, buff);
 
-    while(1);
-*/
-}
+    vga_print("\nDONE WRITING\n");
+
+    ATA_read_sectors(0, 1, 4, read_buff);
+
+
+        
+    for(size_t i = 0; i<2048; ++i){
+        vga_print("%c", (char)read_buff[i]);
+    }
+    
+    vga_print("\nDONE");
+}    
+
+
+
 
 
 

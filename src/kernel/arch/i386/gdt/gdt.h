@@ -14,7 +14,5 @@ typedef struct {
     uint32_t offset;
 } __attribute__ ((packed)) gdt_descriptor_t;
 
-int8_t init_gdt();
-int8_t set_gdt_entry(int index, uint32_t limit, uint32_t base, uint8_t flags, uint8_t access_attr);
+int8_t gdt_init();
 
-extern void load_gdt(gdt_descriptor_t* desc);
