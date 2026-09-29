@@ -14,13 +14,13 @@ extern char _stack_guard[];
 
 
 void exception_handler(registers_t *reg){
-    vga_print("Exception %u occurred with code %u\n", reg->int_no, reg->err_code);
+    kprintf("Exception %u occurred with code %u\n", reg->int_no, reg->err_code);
     while(1);
 }
 
 
 void interrupt_generic(registers_t *reg){
-    vga_print("Interrupt %u called\n", reg->int_no);
+    kprintf("Interrupt %u called\n", reg->int_no);
 }
 
 void irq_handler(registers_t *reg){

@@ -31,7 +31,6 @@ enum Video_Modes {
 };  
 
 void vga_putchar(char cahracter);
-void vga_print(const char* fmt, ...);
 void vga_clear_screen();
 void vga_erase(uint16_t pos, bool update_cursor);
 

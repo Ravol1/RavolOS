@@ -1,9 +1,10 @@
+#include "memory.h"
+
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
-#include "memory.h"
+
 #include "boot/multiboot2.h"
-#include "drivers/video/video.h"
 
 
 #define HMA_BARRIER 0x100000
