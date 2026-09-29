@@ -105,16 +105,16 @@ EXCEPTION_NO_CODE 18  ; #MC - Machine Check - Abort - From the Pentium family
 EXCEPTION_NO_CODE 19  ; #XM - Sexception_commonIMID Floating-Point Exception - Fault - From the Pentium III
 EXCEPTION_NO_CODE 20  ; #VE - Virtualization Exception - Fault
 EXCEPTION_CODE 21     ; #CP - Control Protection Exception - Fault
-EXCEPTION_NO_CODE 22  ; Intel Reserver
-EXCEPTION_NO_CODE 23  ; Intel Reserver
-EXCEPTION_NO_CODE 24  ; Intel Reserver
-EXCEPTION_NO_CODE 25  ; Intel Reserver
-EXCEPTION_NO_CODE 26  ; Intel Reserver
-EXCEPTION_NO_CODE 27  ; Intel Reserver
-EXCEPTION_NO_CODE 28  ; Intel Reserver
-EXCEPTION_NO_CODE 29  ; Intel Reserver
-EXCEPTION_CODE 30  ; Intel Reserver
-EXCEPTION_NO_CODE 31  ; Intel Reserver
+EXCEPTION_NO_CODE 22  ; Intel Reserved
+EXCEPTION_NO_CODE 23  ; Intel Reserved
+EXCEPTION_NO_CODE 24  ; Intel Reserved
+EXCEPTION_NO_CODE 25  ; Intel Reserved
+EXCEPTION_NO_CODE 26  ; Intel Reserved
+EXCEPTION_NO_CODE 27  ; Intel Reserved
+EXCEPTION_NO_CODE 28  ; Intel Reserved
+EXCEPTION_NO_CODE 29  ; Intel Reserved
+EXCEPTION_CODE 30  ; Intel Reserved
+EXCEPTION_NO_CODE 31  ; Intel Reserved
 
 IRQ 0       ; System timer
 IRQ 1       ; Keyboard controller
