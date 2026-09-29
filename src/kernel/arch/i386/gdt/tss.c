@@ -6,7 +6,6 @@
 #include "drivers/video/video.h"
 
 
-
 volatile uint8_t double_fault_stack[4096];
 
 tss_t cs_tss __attribute__((aligned(16)));

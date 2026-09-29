@@ -2,6 +2,8 @@
 
 #define KERNEL_CODE_SELECTOR 0x08
 
+extern volatile uint8_t double_fault_stack[4096];
+
 
 typedef struct {
     uint16_t isr_low;           // Lower 16 bits of ISR's address

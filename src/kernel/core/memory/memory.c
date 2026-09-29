@@ -210,5 +210,36 @@ void* memset(void* ptr, uint8_t value, size_t count){
 
 
 mem_init_status mem_init(uint8_t* mbi) {
+    mb_tag_ptr tag = mbi2_get_tag(mbi, MB2_TAG_MMAP);
+    if(tag.raw == NULL) return MEM_INIT_NO_MB2_MMAP;
 
+    uint32_t mb2_mmap_size = tag.mmmap->size -16;
+    uint32_t mb2_mmap_entry_size = tag.mmmap->entry_size;
+    mb2_mmap_entry_t* mb2_mmap = tag.mmmap->entries;
+    uint8_t* mb2_mmap_end = (uint8_t*)mb2_mmap + mb2_mmap_size;
+
+    uint8_t* ptr = (uint8_t*)mb2_mmap;
+    int i = 0;
+    while(ptr < mb2_mmap_end){
+        mb2_mmap_entry_t* mb2_mmap_entry = (mb2_mmap_entry_t*)ptr;
+
+        mmap_entry_t* mmap_entry = &mmap[i];
+
+        mmap_entry->base = (uint32_t)(mb2_mmap_entry->base_addr);
+        mmap_entry->size = (uint32_t)(mb2_mmap_entry->length);
+        mmap_entry->status = (uint32_t)(mb2_mmap_entry->type);
+
+        ptr += mb2_mmap_entry_size;
+        ++i;   
+
+        if(i >= MAX_MMAP_ENTRIES){
+            mmap_size = i;
+            return MEM_INIT_MEM_TRUNC;
+        }
+    }
+    
+    mmap_size = i;
+
+
+    return MEM_INIT_OK;
 }

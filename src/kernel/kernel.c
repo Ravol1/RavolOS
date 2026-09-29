@@ -15,6 +15,7 @@
 #include "drivers/keyboard/keyboard.h"
 #include "drivers/keyboard/keyboard_mapping.h"
 #include "drivers/storage/disk.h"
+#include "drivers/tests/ata_pio.h"
 
 
 
@@ -28,10 +29,10 @@ void init(){
 
 
 extern int main(uint32_t magic, uint8_t* mbi){
-    vga_init();    
+    video_init();
 
     if(!mb2_is_magic(magic)){
-        vga_print("No multiboot2 detected");
+        kprintf("No multiboot2 detected");
     }
 
     mem_init_status status = mem_init(mbi);
@@ -39,17 +40,17 @@ extern int main(uint32_t magic, uint8_t* mbi){
     switch (status)
     {
     case MEM_INIT_OK:
-        vga_print("MEM OK.\n");
+        kprintf("MEM OK.\n");
         break;
     case MEM_INIT_NO_MB2_MMAP:
-        vga_print("NO MMAP.\n");
+        kprintf("NO MMAP.\n");
         break;
 
     case MEM_INIT_MEM_TRUNC:
-        vga_print("MEM TRUNC.\n");
+        kprintf("MEM TRUNC.\n");
         break;
     default:
-        vga_print("MEM UNKNOWN ERROR.\n");
+        kprintf("MEM UNKNOWN ERROR.\n");
         break;
     }
 
