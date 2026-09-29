@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include "pit.h"
-#include "arch/i386/io/io.h"
+#include "drivers/io/io.h"
 
 #define PIT_BASE_FREQ 1193182
 

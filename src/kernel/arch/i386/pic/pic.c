@@ -1,6 +1,6 @@
 #include "pic.h"
 #include "stdint.h"
-#include "arch/i386/io/io.h"
+#include "drivers/io/io.h"
 
 typedef enum {
     PIC_MASTER = 0x20,

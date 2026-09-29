@@ -2,7 +2,7 @@
 
 #include "idt.h"
 #include "arch/i386/pic/pic.h"
-#include "arch/i386/io/io.h"
+#include "drivers/io/io.h"
 #include"arch/i386/gdt/gdt.h"
 
 #define IDT_ENTRIES 256

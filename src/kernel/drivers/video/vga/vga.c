@@ -1,7 +1,7 @@
 #include <stdarg.h>
 #include <ltostr.h>
 #include "vga.h"
-#include "arch/i386/io/io.h"
+#include "drivers/io/io.h"
 
 uint16_t cursor_position = 0;
 uint8_t video_mode = LIGHTGREEN_BLAK;

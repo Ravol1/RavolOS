@@ -5,12 +5,12 @@
 
 #include "arch/i386/gdt/gdt.h"
 #include "arch/i386/interrupt/idt.h"
-#include "arch/i386/io/io.h"
 #include "arch/i386/memory/paging/paging.h"
 #include "boot/multiboot2.h"
 #include "core/memory/memory.h"
 #include "core/timer/timer.h"
 #include "core/syscall/syscall.h"
+#include "drivers/io/io.h"
 #include "drivers/video/video.h"
 #include "drivers/keyboard/keyboard.h"
 #include "drivers/keyboard/keyboard_mapping.h"
