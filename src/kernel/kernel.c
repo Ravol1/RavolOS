@@ -58,43 +58,9 @@ extern int main(uint32_t magic, uint8_t* mbi){
 
     set_system_clock(TICK_PER_SECOND);
     idt_init();
+
     
-    while(1){
-        if(keyboard_map[KEY_SPACEBAR]) break;
-        asm volatile("hlt");
-    }
-
-    stack_overflow();
-
-
-    while(1){
-        asm volatile("hlt");
-    }
-
-    // spam_syscall();
-    
-    uint8_t* buff;
-    
-    buff = malloc(2048);
-    memset(buff, 0, 2048);
-
-    uint8_t* read_buff;
-    read_buff = malloc(2048);
-    memset(read_buff, 'A', 2048);
-
-    ATA_write_sectors(0, 1, 4, buff);
-
-    vga_print("\nDONE WRITING\n");
-
-    ATA_read_sectors(0, 1, 4, read_buff);
-
-
-        
-    for(size_t i = 0; i<2048; ++i){
-        vga_print("%c", (char)read_buff[i]);
-    }
-    
-    vga_print("\nDONE");
+    spam_syscall();
 }    
 
 

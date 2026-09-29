@@ -6,10 +6,6 @@ KERNEL_DATA_SELECTOR equ 0x10
 extern interrupt_handler
 
 
-global dummy_test_handler
-dummy_test_handler:
-    iret
-
 
 
 %macro EXCEPTION_NO_CODE 1
