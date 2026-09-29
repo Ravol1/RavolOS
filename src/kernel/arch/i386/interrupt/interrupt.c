@@ -33,13 +33,13 @@ void irq_handler(registers_t *reg){
                 // schedule once implemented
                 
                 break;
-            case 46:
-                ATA_primary_irq_handler();
-                break;
-
             case 33:
                 uint16_t scancode = get_keyboard_code();
                 set_keyboard_map(scancode);
+                break;
+
+            case 46:
+                PATA_primary_irq_handler();
                 break;
             default:
                 interrupt_generic(reg);
@@ -55,7 +55,6 @@ void user_handler(registers_t *reg)
     switch (int_no)
         {
             case 0x80:          // Syscall handler  
-
                 syscall_args_t args = {
                     .syscall_num = reg->eax,
                     .args = {
